@@ -21,10 +21,11 @@ AUTH_HEADER="Authorization: Bearer ${GITHUB_TOKEN}"
 echo "GITHUB_EVENT_PATH:"
 echo "$GITHUB_EVENT_PATH"
 
-echo ""
-
 echo "GITHUB_REPOSITORY:" 
 echo "$GITHUB_REPOSITORY"
+
+echo "GITHUB_TOKEN"
+echo "$GITHUB_TOKEN"
 
 number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
 
