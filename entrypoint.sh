@@ -15,11 +15,16 @@ fi
 GITHUB_TOKEN="$1"
 
 URI="https://api.github.com"
-API_HEADER="Accept: application/vnd.github.v3+json"
-AUTH_HEADER="Authorization: token ${GITHUB_TOKEN}"
+API_HEADER="Accept: application/vnd.github+json"
+AUTH_HEADER="Authorization: Bearer ${GITHUB_TOKEN}"
 
-echo "Github event"
-echo "GITHUB_EVENT_PATH"
+echo "GITHUB_EVENT_PATH:"
+echo "$GITHUB_EVENT_PATH"
+
+echo ""
+
+echo "GITHUB_REPOSITORY:" 
+echo "$GITHUB_REPOSITORY"
 
 number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
 
@@ -42,12 +47,12 @@ autolabel() {
 
   echo "Labeling pull request with $label_to_add"
 
-  # Make API request to add the label
   curl -sSL \
     -H "${AUTH_HEADER}" \
     -H "${API_HEADER}" \
-    -X POST \
     -H "Content-Type: application/json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    -X POST \
     -d "{\"labels\":[\"${label_to_add}\"]}" \
     "${URI}/repos/${GITHUB_REPOSITORY}/issues/${number}/labels"
 }
